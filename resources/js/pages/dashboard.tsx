@@ -40,11 +40,11 @@ export default function Dashboard({ stats = {
                         <Link href={route('list.index')}>
                             <Button className="bg-primary hover:bg-primary/90 text-secondary shadow-lg">
                                 <List className="h-4 w-4 mr-2" />
-                                View  ists
+                                View  Lists
                             </Button>                        </Link>                        <Link href={route('task.index')}>
                             <Button className="bg-primary hover:bg-primary/90 text-secondary shadow-lg">
                                 <CheckCircle className="h-4 w-4 mr-2" />
-                                View  asks
+                                View  Tasks
                             </Button>                        </Link>                    </div>                </div>
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 border-blue-500/20">
