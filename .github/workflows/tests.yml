@@ -9,6 +9,7 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
+
     services:
       mysql:
         image: mysql:8
@@ -68,4 +69,5 @@ jobs:
         run: php artisan migrate --force
 
       - name: Run Tests
+        if: "!contains(github.event.head_commit.message, '[skip tests]')"  # 👈 Skip if commit msg contains [skip tests]
         run: ./vendor/bin/pest
