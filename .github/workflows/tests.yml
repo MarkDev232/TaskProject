@@ -14,9 +14,8 @@ jobs:
       mysql:
         image: mysql:8
         env:
-          MYSQL_ROOT_PASSWORD: root
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_DATABASE: laravel12task
-          # Removed MYSQL_USER and MYSQL_PASSWORD to avoid conflict with root user
         ports:
           - 3306:3306
         options: >-
@@ -55,10 +54,15 @@ jobs:
       - name: Copy .env File
         run: cp .env.example .env
 
+      - name: Ensure DB password is empty in .env
+        run: |
+          sed -i '/^DB_PASSWORD=/d' .env
+          echo "DB_PASSWORD=" >> .env
+
       - name: Wait for MySQL to be ready
         run: |
           sudo apt-get install -y mysql-client
-          until mysql -h 127.0.0.1 -u root -proot -e "SHOW DATABASES"; do
+          until mysql -h 127.0.0.1 -u root -e "SHOW DATABASES"; do
             sleep 1
           done
 
@@ -69,5 +73,5 @@ jobs:
         run: php artisan migrate --force
 
       - name: Run Tests
-        if: "!contains(github.event.head_commit.message, '[skip tests]')"  # 👈 Skip if commit msg contains [skip tests]
+        if: "!contains(github.event.head_commit.message, '[skip tests]')"  # Skip if commit msg contains [skip tests]
         run: ./vendor/bin/pest
