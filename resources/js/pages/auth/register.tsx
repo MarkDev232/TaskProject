@@ -1,6 +1,6 @@
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
-import { FormEventHandler } from 'react';
+import { FormEventHandler, useState } from 'react';
 
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
@@ -14,6 +14,8 @@ type RegisterForm = {
     email: string;
     password: string;
     password_confirmation: string;
+    user_role: string;
+    admin_code?: string;
 };
 
 export default function Register() {
@@ -22,12 +24,28 @@ export default function Register() {
         email: '',
         password: '',
         password_confirmation: '',
+        user_role: 'admin', // Default role (admin)
+        admin_code: '',
     });
+
+    // Local state for validation error for admin code
+    const [adminCodeError, setAdminCodeError] = useState<string | null>(null);
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
+
+        if (data.user_role === 'admin') {
+            // Validate the admin code
+            if (data.admin_code !== 'admin-admin123') {
+                setAdminCodeError('Invalid admin validation code.');
+                return; // Stop submission
+            } else {
+                setAdminCodeError(null); // Clear error
+            }
+        }
+
         post(route('register'), {
-            onFinish: () => reset('password', 'password_confirmation'),
+            onFinish: () => reset('password', 'password_confirmation', 'admin_code'),
         });
     };
 
@@ -101,7 +119,28 @@ export default function Register() {
                         <InputError message={errors.password_confirmation} />
                     </div>
 
-                    <Button type="submit" className="mt-2 w-full" tabIndex={5} disabled={processing}>
+                    {/* No user_role selector — fixed as admin */}
+                    {/* Admin validation code input */}
+                    {data.user_role === 'admin' && (
+                        <div className="grid gap-2">
+                            <Label htmlFor="admin_code">Admin Validation Code</Label>
+                            <Input
+                                id="admin_code"
+                                type="text"
+                                required
+                                tabIndex={5}
+                                value={data.admin_code}
+                                onChange={(e) => setData('admin_code', e.target.value)}
+                                disabled={processing}
+                                placeholder="Enter admin validation code"
+                            />
+                            {(adminCodeError || errors.admin_code) && (
+                                <p className="text-red-600 text-sm mt-2">{adminCodeError || errors.admin_code}</p>
+                            )}
+                        </div>
+                    )}
+
+                    <Button type="submit" className="mt-2 w-full" tabIndex={6} disabled={processing}>
                         {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                         Create account
                     </Button>
@@ -109,7 +148,7 @@ export default function Register() {
 
                 <div className="text-muted-foreground text-center text-sm">
                     Already have an account?{' '}
-                    <TextLink href={route('login')} tabIndex={6}>
+                    <TextLink href={route('login')} tabIndex={7}>
                         Log in
                     </TextLink>
                 </div>

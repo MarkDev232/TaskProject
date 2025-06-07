@@ -64,7 +64,7 @@ export default function TasksIndex({ tasks, lists, filters, flash }: Props) {
     const [toastType, setToastType] = useState<'success' | 'error'>('success');
     const [searchTerm, setSearchTerm] = useState(filters.search);
     const [completionFilter, setCompletionFilter] = useState<'all' | 'completed' | 'pending'>(filters.filter as 'all' | 'completed' | 'pending');
-    
+
     useEffect(() => {
         if (flash?.success) {
             setToastMessage(flash.success);
@@ -225,16 +225,16 @@ export default function TasksIndex({ tasks, lists, filters, flash }: Props) {
                                     />
                                 </div>
                                 <div className="space-y-2">
-  <Label htmlFor="description" className="block text-sm font-medium">
-    Description
-  </Label>
-  <Textarea
-    id="description"
-    value={data.description}
-    onChange={(e) => setData('description', e.target.value)}
-    className="focus:ring-primary focus:ring-2 w-full"
-  />
-</div>
+                                    <Label htmlFor="description" className="block text-sm font-medium">
+                                        Description
+                                    </Label>
+                                    <Textarea
+                                        id="description"
+                                        value={data.description}
+                                        onChange={(e) => setData('description', e.target.value)}
+                                        className="focus:ring-primary w-full focus:ring-2"
+                                    />
+                                </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="list_id">List</Label>{' '}
                                     <Select value={data.list_id} onValueChange={(value) => setData('list_id', value)}>
@@ -257,7 +257,7 @@ export default function TasksIndex({ tasks, lists, filters, flash }: Props) {
                                         type="date"
                                         value={data.due_date}
                                         onChange={(e) => setData('due_date', e.target.value)}
-                                        className="focus:ring-primary focus:ring-2"
+                                        className="focus:ring-seconda focus:ring-2"
                                     />
                                 </div>
                                 <div className="flex items-center space-x-2">

@@ -18,7 +18,7 @@ class ListController extends Controller
             ->with('tasks')
             ->get();
 
-        return Inertia::render('list/index', [
+        return Inertia::render('admin/list/index', [
             'lists' => $lists,
             'flash' => [
                 'success' => session('success'),

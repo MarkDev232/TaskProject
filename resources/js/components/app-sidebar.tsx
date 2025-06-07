@@ -10,17 +10,17 @@ import AppLogo from './app-logo';
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        href: '/dashboard',
+        href: '/admin/dashboard',
         icon: LayoutGrid,
     },
     {
         title: 'Lists',
-        href: '/list',
+        href: '/admin/list',
         icon: ClipboardList,
     },
     {
         title: 'Tasks',
-        href: '/task',
+        href: '/admin/task',
         icon: ListTodo,
     },
 ];

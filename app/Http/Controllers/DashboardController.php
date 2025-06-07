@@ -32,7 +32,7 @@ class DashboardController extends Controller
             'pendingTasks' => $tasks->where('is_completed', false)->count(),
         ];
 
-        return Inertia::render('dashboard', [
+        return Inertia::render('admin/dashboard', [
             'stats' => $stats,
             'lists' => $lists,
             'tasks' => $tasks,
