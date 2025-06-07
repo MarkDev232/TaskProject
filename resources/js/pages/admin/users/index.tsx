@@ -61,7 +61,23 @@ export default function Index({ users, flash, userRoles, filters }: Props) {
     const [searchTerm, setSearchTerm] = useState(filters.search);
     const [roleFilter, setRoleFilter] = useState<string>(filters.filter || 'all');
 
-    useEffect(() => {
+    
+
+    const {
+        data,
+        setData,
+        post,
+        put,
+        processing,
+        reset,
+        delete: destroy,
+    } = useForm({
+        name: '',
+        email: '',
+        password: '',
+        user_role: '',
+    });
+useEffect(() => {
         if (flash?.success) {
             setToastMessage(flash.success);
             setToastType('success');
@@ -90,22 +106,8 @@ export default function Index({ users, flash, userRoles, filters }: Props) {
         } else {
             reset();
         }
-    }, [showToast, editingUser]);
+    }, [showToast, editingUser, reset, setData]);
 
-    const {
-        data,
-        setData,
-        post,
-        put,
-        processing,
-        reset,
-        delete: destroy,
-    } = useForm({
-        name: '',
-        email: '',
-        password: '',
-        user_role: '',
-    });
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -132,38 +134,33 @@ export default function Index({ users, flash, userRoles, filters }: Props) {
         }
     };
 
-    const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    
-    // Log the search parameters being sent
-    console.log('Search parameters:', {
-        search: searchTerm,
-        filter: roleFilter
-    });
-
-    router.get(
-        route('users.index'),
-        {
+const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        
+        console.log('Search parameters:', {
             search: searchTerm,
-            filter: roleFilter,
-        },
-        {
-            preserveState: true,
-            preserveScroll: true,
-            onSuccess: (page) => {
-                // This will log the server response
-                console.log('Search results:', page.props.users);
-                console.log('Current filters:', page.props.filters);
+            filter: roleFilter
+        });
+
+        router.get(
+            route('users.index'),
+            {
+                search: searchTerm,
+                filter: roleFilter,
             },
-            onError: (errors) => {
-                console.error('Search error:', errors);
+            {
+                preserveState: true,
+                preserveScroll: true,
+                onSuccess: () => {
+                    console.log('Search results:', users);
+                },
+                onError: (errors) => {
+                    console.error('Search error:', errors);
+                }
             },
-            onFinish: () => {
-                console.log('Search request completed');
-            }
-        },
-    );
-};
+        );
+    };
+
 
     const handleFilterChange = (value: string) => {
     console.log('Selected filter value:', value);
