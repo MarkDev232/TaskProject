@@ -1,5 +1,5 @@
 <?php
-use App\Models\TaskList;
+use App\Models\Tasklist;
 use App\Models\User;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
