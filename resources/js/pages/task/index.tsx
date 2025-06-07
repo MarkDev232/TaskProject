@@ -64,7 +64,7 @@ export default function TasksIndex({ tasks, lists, filters, flash }: Props) {
     const [toastType, setToastType] = useState<'success' | 'error'>('success');
     const [searchTerm, setSearchTerm] = useState(filters.search);
     const [completionFilter, setCompletionFilter] = useState<'all' | 'completed' | 'pending'>(filters.filter as 'all' | 'completed' | 'pending');
-
+    
     useEffect(() => {
         if (flash?.success) {
             setToastMessage(flash.success);
@@ -204,12 +204,12 @@ export default function TasksIndex({ tasks, lists, filters, flash }: Props) {
                     </div>{' '}
                     <Dialog open={isOpen} onOpenChange={setIsOpen}>
                         <DialogTrigger>
-                            <Button className="bg-primary hover:bg-primary/90 text-black shadow-lg">
+                            <Button className="bg-primary hover:bg-primary/90 shadow-lg">
                                 <Plus className="mr-2 h-4 w-4" />
                                 New Task
                             </Button>{' '}
                         </DialogTrigger>{' '}
-                        <DialogContent className="position-absolute top-1/4 left-1/3 w-full">
+                        <DialogContent className="position-absolute top-1/8 left-1/3 w-full">
                             <DialogHeader>
                                 <DialogTitle className="text-xl">{editingTask ? 'Edit Task' : 'Create New Task'}</DialogTitle>{' '}
                             </DialogHeader>{' '}
@@ -225,14 +225,16 @@ export default function TasksIndex({ tasks, lists, filters, flash }: Props) {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="description">Description</Label>{' '}
-                                    <Textarea
-                                        id="description"
-                                        value={data.description}
-                                        onChange={(e) => setData('description', e.target.value)}
-                                        className="focus:ring-primary focus:ring-2"
-                                    />
-                                </div>{' '}
+  <Label htmlFor="description" className="block text-sm font-medium">
+    Description
+  </Label>
+  <Textarea
+    id="description"
+    value={data.description}
+    onChange={(e) => setData('description', e.target.value)}
+    className="focus:ring-primary focus:ring-2 w-full"
+  />
+</div>
                                 <div className="space-y-2">
                                     <Label htmlFor="list_id">List</Label>{' '}
                                     <Select value={data.list_id} onValueChange={(value) => setData('list_id', value)}>

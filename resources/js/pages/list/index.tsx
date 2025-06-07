@@ -179,22 +179,22 @@ export default function ListsIndex({ lists, flash }: Props) {
                                             </Button>
                                         </AlertDialogTrigger>
 
-                                        <AlertDialogContent className="absolute top-1/4 left-1/3 w-full max-w-md rounded-md bg-black p-6 shadow-lg">
+                                        <AlertDialogContent className="absolute top-1/4 left-1/3 w-full max-w-md rounded-md bg-secondary p-6 shadow-lg">
                                             <AlertDialogHeader>
-                                                <AlertDialogTitle className="mb-4 text-lg font-semibold">Confirm Delete</AlertDialogTitle>
+                                                <AlertDialogTitle className="mb-4 text-lg font-semibold text-primary">Confirm Delete</AlertDialogTitle>
                                             </AlertDialogHeader>
 
-                                            <p className="text-white-600 mb-6 text-sm">
+                                            <p className="text-primary mb-6 text-sm">
                                                 Are you sure you want to delete this list? This action cannot be undone.
                                             </p>
 
                                             <div className="flex justify-end space-x-3">
-                                                <AlertDialogCancel className="rounded border-green-700 bg-white px-4 py-2 text-black hover:bg-green-700 hover:text-white">
+                                                <AlertDialogCancel className="rounded border-green-700 bg-primary px-4 py-2 text-secondary hover:bg-green-700 hover:text-white">
                                                     Cancel
                                                 </AlertDialogCancel>
                                                 <AlertDialogAction
                                                     onClick={() => handleDelete(list.id)}
-                                                    className="rounded border-1 border-red-700 bg-white px-4 py-2 text-black hover:bg-red-700 hover:text-white"
+                                                    className="rounded border-1 border-red-700 bg-primary px-4 py-2 text-secondary hover:bg-red-700 hover:text-white"
                                                 >
                                                     Delete
                                                 </AlertDialogAction>
