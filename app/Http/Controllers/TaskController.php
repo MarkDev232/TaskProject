@@ -64,9 +64,9 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'due_date' => 'nullable|date',
+            'name' => 'required|string|max:100',
+            'email' => 'nullable|string',
+            'role' => 'nullable|string',
             'list_id' => 'required|exists:lists,id',
             'is_completed' => 'boolean'
         ]);

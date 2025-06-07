@@ -293,8 +293,8 @@ export default function TasksIndex({ tasks, lists, filters, flash }: Props) {
                     </Select>{' '}
                 </div>
                 <div className="rounded-md border">
-                    <div className="relative w-full overflow-auto">
-                        <table className="w-full caption-bottom text-sm">
+    <div className="relative w-full overflow-auto">
+        <table className="w-full caption-bottom text-sm">
                             <thead className="[&_tr]:border-b">
                                 <tr className="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors">
                                     <th className="text-muted-foreground h-12 px-4 text-left align-middle font-medium">Title</th>

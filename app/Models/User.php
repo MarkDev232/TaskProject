@@ -17,6 +17,12 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+
+    public const ROLES = [
+        'Staff Member' => 'staff',
+        'Developer' => 'developer',
+        'Assurance' => 'QA',
+    ];
     protected $fillable = [
         'name',
         'email',
@@ -45,5 +51,9 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function getRouteKeyName()
+    {
+        return 'id'; // Explicitly set to use 'id' for route binding
     }
 }
