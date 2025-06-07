@@ -5,7 +5,7 @@ use App\Models\User;
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 test('guests are redirected to the login page', function () {
-    $this->get('/dashboard')->assertRedirect('/login');
+    $this->get('/admin/dashboard')->assertRedirect('/login');
 });
 
 
@@ -14,5 +14,5 @@ test('authenticated users can visit the dashboard', function () {
 
     TaskList::factory()->create(['user_id' => $user->id]);
 
-    $this->get('/dashboard')->assertOk();
+    $this->get('/admin/dashboard')->assertOk();
 });
