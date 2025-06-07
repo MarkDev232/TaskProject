@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\TaskList;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -9,15 +11,14 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class TaskListFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = TaskList::class;
+
     public function definition(): array
     {
         return [
-            //
+            'user_id' => User::factory(), // creates a user automatically if not provided
+            'title' => $this->faker->sentence,
+            'description' => $this->faker->paragraph,
         ];
     }
 }
