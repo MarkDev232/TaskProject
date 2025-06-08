@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Http\RedirectResponse;
 
 class UserController extends Controller
 {
@@ -92,7 +93,6 @@ class UserController extends Controller
         'name' => 'required|string|max:255',
         'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
         'user_role' => ['required', Rule::in($validRoles)],
-        // Remove password from validation since we'll generate it
     ]);
 
     // Generate a random 12-character temporary password

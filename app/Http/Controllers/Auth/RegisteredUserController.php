@@ -47,6 +47,6 @@ $user = User::create([
 
         Auth::login($user);
 
-        return to_route('admin.dashboard');
+        return to_route('dashboard');
     }
 }
