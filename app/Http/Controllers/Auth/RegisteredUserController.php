@@ -30,24 +30,23 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'user_role' => 'admin', // Default user role set to 'admin'
-        ]);
+$request->validate([
+    'name' => 'required|string|max:255',
+    'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+    'password' => ['required', 'confirmed', Rules\Password::defaults()],
+    // Remove user_role from validation since it's fixed
+]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'user_role' => $request->user_role, // Store the user role
-        ]);
-
+$user = User::create([
+    'name' => $request->name,
+    'email' => $request->email,
+    'password' => Hash::make($request->password),
+    'user_role' => 'admin', // Fixed value here
+]);
         event(new Registered($user));
 
         Auth::login($user);
 
-        return to_route('dashboard');
+        return to_route('admin.dashboard');
     }
 }

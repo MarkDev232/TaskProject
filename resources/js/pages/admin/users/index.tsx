@@ -7,10 +7,16 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router, useForm } from '@inertiajs/react';
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogTitle, AlertDialogCancel, AlertDialogAction } from '@radix-ui/react-alert-dialog';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@radix-ui/react-alert-dialog';
 import { CheckCircle2, ChevronLeft, ChevronRight, Pencil, Plus, Search, Trash2, XCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
-
 
 interface User {
     id: number;
@@ -61,8 +67,6 @@ export default function Index({ users, flash, userRoles, filters }: Props) {
     const [searchTerm, setSearchTerm] = useState(filters.search);
     const [roleFilter, setRoleFilter] = useState<string>(filters.filter || 'all');
 
-    
-
     const {
         data,
         setData,
@@ -77,7 +81,7 @@ export default function Index({ users, flash, userRoles, filters }: Props) {
         password: '',
         user_role: '',
     });
-useEffect(() => {
+    useEffect(() => {
         if (flash?.success) {
             setToastMessage(flash.success);
             setToastType('success');
@@ -108,7 +112,6 @@ useEffect(() => {
         }
     }, [showToast, editingUser, reset, setData]);
 
-
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log('Submitting form data:', data); // Add this line
@@ -134,12 +137,12 @@ useEffect(() => {
         }
     };
 
-const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        
+
         console.log('Search parameters:', {
             search: searchTerm,
-            filter: roleFilter
+            filter: roleFilter,
         });
 
         router.get(
@@ -156,50 +159,30 @@ const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
                 },
                 onError: (errors) => {
                     console.error('Search error:', errors);
-                }
+                },
             },
         );
     };
 
-
-    const handleFilterChange = (value: string) => {
-    console.log('Selected filter value:', value);
-    setRoleFilter(value);
-    router.get(
-        route('users.index'),
-        {
-            search: searchTerm,
-            filter: value,
-        },
-        { 
-            preserveState: true, 
+    const handleDelete = (id: number) => {
+        destroy(route('users.destroy', id), {
+            method: 'delete', // Explicitly set the method
             preserveScroll: true,
-            onSuccess: (page) => {
-                console.log('Filtered users:', users.data);
-            }
-        }
-    );
-};
-
-      const handleDelete = (id: number) => {
-    destroy(route('users.destroy', id), {
-        method: 'delete', // Explicitly set the method
-        preserveScroll: true,
-        onSuccess: () => {
-            setToastMessage('User deleted successfully');
-            setToastType('success');
-            setShowToast(true);
-            // Optionally refresh the user list
-            router.reload();
-        },
-        onError: (errors) => {
-            setToastMessage('Failed to delete user');
-            setToastType('error');
-            setShowToast(true);
-            console.error('Delete error:', errors);
-        }
-    });
-}
+            onSuccess: () => {
+                setToastMessage('User deleted successfully');
+                setToastType('success');
+                setShowToast(true);
+                // Optionally refresh the user list
+                router.reload();
+            },
+            onError: (errors) => {
+                setToastMessage('Failed to delete user');
+                setToastType('error');
+                setShowToast(true);
+                console.error('Delete error:', errors);
+            },
+        });
+    };
 
     const handlePageChange = (page: number) => {
         router.get(
@@ -294,42 +277,35 @@ const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
                             </form>
                         </DialogContent>{' '}
                     </Dialog>{' '}
-                    
                 </div>
-                 
                 <div className="mb-4 flex gap-4">
                     <form onSubmit={handleSearch} className="relative flex-1">
                         <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
                         <Input placeholder="Search users ..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10" />
                     </form>{' '}
-                  <Select 
-                value={roleFilter} 
-                onValueChange={(value) => {
-                    setRoleFilter(value);
-                    router.get(
-                        route('users.index'),
-                        { search: searchTerm, filter: value },
-                        { preserveState: true, preserveScroll: true }
-        );
-    }}
->
-    <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Filter by role">
-            {roleFilter === 'all' ? 'All Roles' : 
-             userRoles.find(role => role.name.toLowerCase() === roleFilter)?.name || roleFilter}
-        </SelectValue>
-       
-    </SelectTrigger>
-    <SelectContent>
-        <SelectItem value="all">All Roles</SelectItem>
-        {userRoles.map((role) => (
-            <SelectItem key={role.name} value={role.name.toLowerCase()}>
-                {role.name}
-            </SelectItem>
-        ))}
-        
-    </SelectContent>
-</Select>
+                    <Select
+                        value={roleFilter}
+                        onValueChange={(value) => {
+                            setRoleFilter(value);
+                            router.get(route('users.index'), { search: searchTerm, filter: value }, { preserveState: true, preserveScroll: true });
+                        }}
+                    >
+                        <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="Filter by role">
+                                {roleFilter === 'all'
+                                    ? 'All Roles'
+                                    : userRoles.find((role) => role.name.toLowerCase() === roleFilter)?.name || roleFilter}
+                            </SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">All Roles</SelectItem>
+                            {userRoles.map((role) => (
+                                <SelectItem key={role.name} value={role.name.toLowerCase()}>
+                                    {role.name}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                 </div>
                 <div className="rounded-md border">
                     <div className="relative w-full overflow-auto">
@@ -365,46 +341,44 @@ const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
                                                 >
                                                     <Pencil className="h-4 w-4" />
                                                 </Button>
-                                      <AlertDialog>
-  <AlertDialogTrigger asChild>
-    <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive/90">
-      <Trash2 className="h-4 w-4" />
-    </Button>
-  </AlertDialogTrigger>
+                                                <AlertDialog>
+                                                    <AlertDialogTrigger asChild>
+                                                        <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive/90">
+                                                            <Trash2 className="h-4 w-4" />
+                                                        </Button>
+                                                    </AlertDialogTrigger>
 
-  <AlertDialogContent className="fixed inset-0 z-30 flex items-center justify-center  bg-black/80">
-    
-    
-    <div className="mx-auto w-full max-w-md rounded-lg bg-secondary p-6 shadow-lg">
-      <AlertDialogHeader>
-        <AlertDialogTitle className="mb-4 text-lg font-semibold text-primary">
-          Confirm Delete
-        </AlertDialogTitle>
-      </AlertDialogHeader>
+                                                    <AlertDialogContent className="fixed inset-0 z-30 flex items-center justify-center bg-black/80">
+                                                        <div className="bg-secondary mx-auto w-full max-w-md rounded-lg p-6 shadow-lg">
+                                                            <AlertDialogHeader>
+                                                                <AlertDialogTitle className="text-primary mb-4 text-lg font-semibold">
+                                                                    Confirm Delete
+                                                                </AlertDialogTitle>
+                                                            </AlertDialogHeader>
 
-      <p className="text-primary mb-6 text-sm">
-        Are you sure you want to delete this list? This action cannot be undone.
-      </p>
+                                                            <p className="text-primary mb-6 text-sm">
+                                                                Are you sure you want to delete this list? This action cannot be undone.
+                                                            </p>
 
-      <div className="flex justify-end space-x-3">
-        <AlertDialogCancel className="rounded border-green-700 bg-primary px-4 py-2 text-secondary hover:bg-green-700 hover:text-white">
-          Cancel
-        </AlertDialogCancel>
-        <AlertDialogAction
-          onClick={() => handleDelete(user.id)}
-          className="rounded border border-red-700 bg-primary px-4 py-2 text-secondary hover:bg-red-700 hover:text-white"
-        >
-          Delete
-        </AlertDialogAction>
-      </div>
-    </div>
-  </AlertDialogContent>
-</AlertDialog>
+                                                            <div className="flex justify-end space-x-3">
+                                                                <AlertDialogCancel className="bg-primary text-secondary rounded border-green-700 px-4 py-2 hover:bg-green-700 hover:text-white">
+                                                                    Cancel
+                                                                </AlertDialogCancel>
+                                                                <AlertDialogAction
+                                                                    onClick={() => handleDelete(user.id)}
+                                                                    className="bg-primary text-secondary rounded border border-red-700 px-4 py-2 hover:bg-red-700 hover:text-white"
+                                                                >
+                                                                    Delete
+                                                                </AlertDialogAction>
+                                                            </div>
+                                                        </div>
+                                                    </AlertDialogContent>
+                                                </AlertDialog>
                                             </div>
                                         </td>
                                     </tr>
                                 ))}
-                                
+
                                 {users.data.length === 0 && (
                                     <tr>
                                         <td colSpan={6} className="text-muted-foreground p-4 text-center">
@@ -437,9 +411,7 @@ const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
                                     variant={page === users.current_page ? 'default' : 'outline'}
                                     size="icon"
                                     onClick={() => handlePageChange(page)}
-                                >
-                                    {page}
-                                </Button>
+                                ></Button>
                             ))}
                         </div>{' '}
                         <Button
